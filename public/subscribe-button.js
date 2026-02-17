@@ -39,11 +39,16 @@
         display: flex;\
         align-items: center;\
         justify-content: center;\
+        padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)) 12px;\
+        box-sizing: border-box;\
         pointer-events: none;\
       }\
       .om-subscribe-panel {\
         pointer-events: auto;\
-        width: min(94vw, 520px);\
+        width: 100%;\
+        max-width: 520px;\
+        box-sizing: border-box;\
+        overflow: hidden;\
         background: rgba(8, 8, 8, 0.95);\
         border: 1px solid rgba(255, 247, 77, 0.45);\
         border-radius: 14px;\
@@ -53,6 +58,8 @@
       }\
       .om-enter-btn {\
         width: 100%;\
+        box-sizing: border-box;\
+        min-width: 0;\
         border-radius: 10px;\
         border: 1px solid rgba(255, 247, 77, 0.6);\
         background: #101010;\
@@ -70,6 +77,9 @@
       .om-subscribe-form {\
         display: none;\
         margin-top: 12px;\
+        min-width: 0;\
+        width: 100%;\
+        box-sizing: border-box;\
       }\
       .om-subscribe-form.open {\
         display: grid;\
@@ -77,6 +87,7 @@
       }\
       .om-email-input {\
         width: 100%;\
+        min-width: 0;\
         box-sizing: border-box;\
         padding: 12px 14px;\
         border-radius: 10px;\
@@ -96,6 +107,9 @@
       }\
       .om-legal-note {\
         margin: 0;\
+        width: 100%;\
+        max-width: 100%;\
+        min-width: 0;\
         color: #d3cd58;\
         font-size: 11px;\
         line-height: 1.5;\
@@ -108,6 +122,9 @@
       .om-status {\
         margin: 2px 0 0 0;\
         min-height: 16px;\
+        width: 100%;\
+        max-width: 100%;\
+        min-width: 0;\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
         font-size: 11px;\
         font-weight: 700;\
@@ -117,7 +134,7 @@
       }\
       @media (max-width: 480px) {\
         .om-subscribe-panel {\
-          width: 94vw;\
+          width: 100%;\
           padding: 12px;\
           border-radius: 12px;\
         }\
@@ -164,7 +181,7 @@
 
     var note = document.createElement('p');
     note.className = 'om-legal-note';
-    note.textContent = 'By dropping your email, you agree aux cookies, a notre vibe de confidentialite, et tu confirmes que tu es majeur selon les lois de ton pays.';
+    note.textContent = 'En entrant ton email, tu acceptes les cookies, notre policy de confidentialite, et tu confirmes que tu es 18+ selon les lois de ton pays.';
 
     var msg = document.createElement('p');
     msg.className = 'om-status';
