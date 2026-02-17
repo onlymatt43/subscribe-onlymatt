@@ -41,6 +41,23 @@ export async function ensureSchema() {
     ON subscribers(email, source)
   `);
 
+  // Backward-compatible migration for already-existing tables.
+  const tableInfo = await client.execute(`PRAGMA table_info(subscribers)`);
+  const existingColumns = new Set(tableInfo.rows.map((row) => String(row.name)));
+
+  if (!existingColumns.has('ip')) {
+    await client.execute(`ALTER TABLE subscribers ADD COLUMN ip TEXT NOT NULL DEFAULT 'unknown'`);
+  }
+  if (!existingColumns.has('user_agent')) {
+    await client.execute(`ALTER TABLE subscribers ADD COLUMN user_agent TEXT`);
+  }
+  if (!existingColumns.has('created_at')) {
+    await client.execute(`ALTER TABLE subscribers ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP`);
+  }
+  if (!existingColumns.has('updated_at')) {
+    await client.execute(`ALTER TABLE subscribers ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP`);
+  }
+
   schemaReady = true;
 }
 
