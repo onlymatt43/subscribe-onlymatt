@@ -1,0 +1,13 @@
+{
+  "name": "subscribe",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone subscribe system (API + embeddable button)",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.17.0"
+  }
+}
