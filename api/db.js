@@ -42,6 +42,12 @@ export async function ensureSchema() {
   `);
 
   // Backward-compatible migration for already-existing tables.
+  await ensureLegacyColumns(client);
+
+  schemaReady = true;
+}
+
+async function ensureLegacyColumns(client) {
   const tableInfo = await client.execute(`PRAGMA table_info(subscribers)`);
   const existingColumns = new Set(tableInfo.rows.map((row) => String(row.name)));
 
@@ -57,15 +63,13 @@ export async function ensureSchema() {
   if (!existingColumns.has('updated_at')) {
     await client.execute(`ALTER TABLE subscribers ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP`);
   }
-
-  schemaReady = true;
 }
 
 export async function upsertSubscriber({ email, source, ip, userAgent }) {
   const client = getClient();
   await ensureSchema();
 
-  await client.execute({
+  const statement = {
     sql: `
       INSERT INTO subscribers (email, source, ip, user_agent)
       VALUES (?, ?, ?, ?)
@@ -75,5 +79,17 @@ export async function upsertSubscriber({ email, source, ip, userAgent }) {
         updated_at = CURRENT_TIMESTAMP
     `,
     args: [email, source, ip || 'unknown', userAgent || null],
-  });
+  };
+
+  try {
+    await client.execute(statement);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (message.includes('no column named ip') || message.includes('no column named user_agent')) {
+      await ensureLegacyColumns(client);
+      await client.execute(statement);
+      return;
+    }
+    throw error;
+  }
 }
