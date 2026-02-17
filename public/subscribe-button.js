@@ -2,8 +2,17 @@
   if (window.__omSubscribeLoaded) return;
   window.__omSubscribeLoaded = true;
 
-  var apiBase = (window.OM_SUBSCRIBE_API_BASE || '').replace(/\/$/, '');
-  var endpoint = (apiBase ? apiBase : 'https://connect.onlymatt.ca') + '/api/subscribe';
+  function getDefaultApiBase() {
+    try {
+      if (document.currentScript && document.currentScript.src) {
+        return new URL(document.currentScript.src).origin;
+      }
+    } catch (_) {}
+    return window.location.origin;
+  }
+
+  var apiBase = (window.OM_SUBSCRIBE_API_BASE || getDefaultApiBase()).replace(/\/$/, '');
+  var endpoint = apiBase + '/api/subscribe';
   var source = (window.OM_SUBSCRIBE_SOURCE || window.location.hostname || 'embed').toLowerCase();
 
   function init() {

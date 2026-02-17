@@ -17,9 +17,18 @@ Open:
 ## Embed button on any site
 
 ```html
+<script src="https://your-subscribe-domain.com/subscribe-button.js"></script>
+```
+
+Par defaut, le bouton envoie vers `https://your-subscribe-domain.com/api/subscribe`
+(le meme domaine qui sert le script).
+
+Optionnel:
+
+```html
 <script>
   window.OM_SUBSCRIBE_API_BASE = 'https://your-subscribe-domain.com';
-  window.OM_SUBSCRIBE_SOURCE = 'instagram-post';
+  window.OM_SUBSCRIBE_SOURCE = 'global';
 </script>
 <script src="https://your-subscribe-domain.com/subscribe-button.js"></script>
 ```
