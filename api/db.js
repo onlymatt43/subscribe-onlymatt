@@ -58,10 +58,10 @@ async function ensureLegacyColumns(client) {
     await client.execute(`ALTER TABLE subscribers ADD COLUMN user_agent TEXT`);
   }
   if (!existingColumns.has('created_at')) {
-    await client.execute(`ALTER TABLE subscribers ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP`);
+    await client.execute(`ALTER TABLE subscribers ADD COLUMN created_at DATETIME`);
   }
   if (!existingColumns.has('updated_at')) {
-    await client.execute(`ALTER TABLE subscribers ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP`);
+    await client.execute(`ALTER TABLE subscribers ADD COLUMN updated_at DATETIME`);
   }
 }
 
@@ -71,8 +71,8 @@ export async function upsertSubscriber({ email, source, ip, userAgent }) {
 
   const statement = {
     sql: `
-      INSERT INTO subscribers (email, source, ip, user_agent)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO subscribers (email, source, ip, user_agent, created_at, updated_at)
+      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
       ON CONFLICT(email, source) DO UPDATE SET
         ip = excluded.ip,
         user_agent = excluded.user_agent,
