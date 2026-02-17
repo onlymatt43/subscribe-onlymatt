@@ -241,7 +241,7 @@
           msg.textContent = 'Email required';
           return;
         }
-        var basicEmailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+        var basicEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!basicEmailRegex.test(email)) {
           msg.style.color = '#d3cd58';
           msg.textContent = 'Complete ton email.';
