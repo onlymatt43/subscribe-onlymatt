@@ -294,7 +294,7 @@
       if (submitTimeout) clearTimeout(submitTimeout);
       submitTimeout = setTimeout(function () {
         submitEmail();
-      }, 750);
+      }, 1500);
     });
 
     form.addEventListener('submit', function (e) {
