@@ -43,7 +43,7 @@
       }\
       .om-subscribe-panel {\
         pointer-events: auto;\
-        width: min(92vw, 520px);\
+        width: min(94vw, 520px);\
         background: rgba(8, 8, 8, 0.95);\
         border: 1px solid rgba(255, 247, 77, 0.45);\
         border-radius: 14px;\
@@ -101,6 +101,9 @@
         line-height: 1.5;\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
         font-weight: 700;\
+        white-space: normal;\
+        overflow-wrap: anywhere;\
+        word-break: break-word;\
       }\
       .om-status {\
         margin: 2px 0 0 0;\
@@ -108,6 +111,29 @@
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
         font-size: 11px;\
         font-weight: 700;\
+        white-space: normal;\
+        overflow-wrap: anywhere;\
+        word-break: break-word;\
+      }\
+      @media (max-width: 480px) {\
+        .om-subscribe-panel {\
+          width: 94vw;\
+          padding: 12px;\
+          border-radius: 12px;\
+        }\
+        .om-enter-btn {\
+          padding: 12px;\
+          letter-spacing: 0.08em;\
+          font-size: 15px;\
+        }\
+        .om-email-input {\
+          padding: 11px 12px;\
+          font-size: 13px;\
+        }\
+        .om-legal-note, .om-status {\
+          font-size: 10px;\
+          line-height: 1.4;\
+        }\
       }\
     ';
     document.head.appendChild(style);
