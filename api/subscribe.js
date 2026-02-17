@@ -50,6 +50,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true, message: 'Email saved', source });
   } catch (error) {
     console.error('subscribe error', error);
-    return res.status(500).json({ error: 'Server error' });
+    const details = error instanceof Error ? error.message : String(error);
+    return res.status(500).json({ error: 'Server error', details });
   }
 }
