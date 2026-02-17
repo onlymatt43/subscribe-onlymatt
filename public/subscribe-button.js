@@ -21,26 +21,136 @@
     /trashmail/i, /yopmail/i, /sharklasers/i
   ];
 
+  function injectStyles() {
+    if (document.getElementById('om-subscribe-styles')) return;
+
+    var fontLink = document.createElement('link');
+    fontLink.rel = 'stylesheet';
+    fontLink.href = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap';
+    document.head.appendChild(fontLink);
+
+    var style = document.createElement('style');
+    style.id = 'om-subscribe-styles';
+    style.textContent = '\
+      .om-subscribe-root {\
+        position: fixed;\
+        inset: 0;\
+        z-index: 99999;\
+        display: flex;\
+        align-items: center;\
+        justify-content: center;\
+        pointer-events: none;\
+      }\
+      .om-subscribe-panel {\
+        pointer-events: auto;\
+        width: min(92vw, 520px);\
+        background: rgba(8, 8, 8, 0.95);\
+        border: 1px solid rgba(255, 247, 77, 0.45);\
+        border-radius: 14px;\
+        box-shadow: 0 14px 44px rgba(0,0,0,0.45);\
+        padding: 16px;\
+        font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
+      }\
+      .om-enter-btn, .om-submit-btn {\
+        width: 100%;\
+        border-radius: 10px;\
+        border: 1px solid rgba(255, 247, 77, 0.6);\
+        background: #101010;\
+        color: #fff74d;\
+        font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
+        font-weight: 800;\
+        letter-spacing: 0.14em;\
+        text-transform: uppercase;\
+        cursor: pointer;\
+      }\
+      .om-enter-btn {\
+        padding: 14px 16px;\
+        font-size: clamp(14px, 2.8vw, 18px);\
+      }\
+      .om-subscribe-form {\
+        display: none;\
+        margin-top: 12px;\
+      }\
+      .om-subscribe-form.open {\
+        display: grid;\
+        gap: 10px;\
+      }\
+      .om-email-input {\
+        width: 100%;\
+        box-sizing: border-box;\
+        padding: 12px 14px;\
+        border-radius: 10px;\
+        border: 1px solid #3f3f3f;\
+        background: #121212;\
+        color: #fff74d;\
+        font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
+        font-weight: 700;\
+        font-size: 14px;\
+        outline: none;\
+      }\
+      .om-email-input::placeholder {\
+        color: #bdb76b;\
+      }\
+      .om-email-input:focus {\
+        border-color: #fff74d;\
+      }\
+      .om-submit-btn {\
+        padding: 12px 14px;\
+        font-size: 13px;\
+      }\
+      .om-legal-note {\
+        margin: 0;\
+        color: #d3cd58;\
+        font-size: 11px;\
+        line-height: 1.5;\
+        font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
+        font-weight: 700;\
+      }\
+      .om-status {\
+        margin: 2px 0 0 0;\
+        min-height: 16px;\
+        font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
+        font-size: 11px;\
+        font-weight: 700;\
+      }\
+    ';
+    document.head.appendChild(style);
+  }
+
   function init() {
-    var wrap = document.createElement('div');
-    wrap.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:99999;font-family:system-ui,-apple-system,sans-serif;';
+    injectStyles();
+
+    var root = document.createElement('div');
+    root.className = 'om-subscribe-root';
+
+    var panel = document.createElement('div');
+    panel.className = 'om-subscribe-panel';
+
+    var enterBtn = document.createElement('button');
+    enterBtn.type = 'button';
+    enterBtn.className = 'om-enter-btn';
+    enterBtn.textContent = 'ENTER';
 
     var form = document.createElement('form');
-    form.style.cssText = 'display:flex;gap:8px;background:#0b0b0b;border:1px solid #2a2a2a;padding:10px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.35);';
+    form.className = 'om-subscribe-form';
 
     var input = document.createElement('input');
     input.type = 'email';
     input.required = true;
-    input.placeholder = 'your@email.com';
-    input.style.cssText = 'background:#121212;color:#fff;border:1px solid #333;border-radius:8px;padding:10px;min-width:200px;outline:none;';
+    input.className = 'om-email-input';
+    input.placeholder = 'enter your email';
 
-    var btn = document.createElement('button');
-    btn.type = 'submit';
-    btn.textContent = 'Subscribe';
-    btn.style.cssText = 'background:#fff;color:#000;border:0;border-radius:8px;padding:10px 12px;font-weight:700;cursor:pointer;';
+    var submitBtn = document.createElement('button');
+    submitBtn.type = 'submit';
+    submitBtn.className = 'om-submit-btn';
+    submitBtn.textContent = 'SUBSCRIBE';
 
-    var msg = document.createElement('div');
-    msg.style.cssText = 'margin-top:8px;font-size:12px;color:#c9c9c9;min-height:16px;';
+    var note = document.createElement('p');
+    note.className = 'om-legal-note';
+    note.textContent = 'By dropping your email, you agree aux cookies, a notre vibe de confidentialite, et tu confirmes que tu es majeur selon les lois de ton pays.';
+
+    var msg = document.createElement('p');
+    msg.className = 'om-status';
 
     var honeypot = document.createElement('input');
     honeypot.type = 'text';
@@ -50,32 +160,42 @@
     honeypot.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;';
 
     form.appendChild(input);
-    form.appendChild(btn);
+    form.appendChild(submitBtn);
+    form.appendChild(note);
+    form.appendChild(msg);
     form.appendChild(honeypot);
-    wrap.appendChild(form);
-    wrap.appendChild(msg);
-    document.body.appendChild(wrap);
+
+    panel.appendChild(enterBtn);
+    panel.appendChild(form);
+    root.appendChild(panel);
+    document.body.appendChild(root);
+
+    enterBtn.addEventListener('click', function () {
+      form.classList.add('open');
+      enterBtn.style.display = 'none';
+      input.focus();
+    });
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       msg.textContent = '';
-      btn.disabled = true;
-      btn.textContent = '...';
+      submitBtn.disabled = true;
+      submitBtn.textContent = '...';
 
       try {
         var email = input.value.trim().toLowerCase();
         if (!email) {
-          msg.style.color = '#ff6b6b';
+          msg.style.color = '#ff7a7a';
           msg.textContent = 'Email required';
           return;
         }
         if (blockedPatterns.some(function (p) { return p.test(email); })) {
-          msg.style.color = '#ff6b6b';
+          msg.style.color = '#ff7a7a';
           msg.textContent = 'Disposable email refused';
           return;
         }
         if (honeypot.value) {
-          msg.style.color = '#ff6b6b';
+          msg.style.color = '#ff7a7a';
           msg.textContent = 'Validation failed';
           return;
         }
@@ -86,24 +206,25 @@
           body: JSON.stringify({ email: email, source: source, website: honeypot.value || '' })
         });
         var data = await res.json();
+
         if (!res.ok) {
-          msg.style.color = '#ff6b6b';
+          msg.style.color = '#ff7a7a';
           msg.textContent = data.error || 'Error';
         } else {
-          msg.style.color = '#5ee07f';
-          msg.textContent = data.message || 'Saved';
+          msg.style.color = '#9cff77';
+          msg.textContent = data.message || 'Email saved';
           localStorage.setItem('hasSubscribed', 'true');
           input.value = '';
           setTimeout(function () {
-            wrap.remove();
-          }, 900);
+            root.remove();
+          }, 1000);
         }
       } catch (_) {
-        msg.style.color = '#ff6b6b';
+        msg.style.color = '#ff7a7a';
         msg.textContent = 'Network error';
       } finally {
-        btn.disabled = false;
-        btn.textContent = 'Subscribe';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'SUBSCRIBE';
       }
     });
   }
