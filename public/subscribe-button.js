@@ -58,23 +58,33 @@
         box-shadow: 0 14px 44px rgba(0,0,0,0.45);\
         padding: 16px;\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
+        display: flex;\
+        flex-direction: column;\
+        align-items: center;\
       }\
       .om-enter-btn {\
-        width: 100%;\
+        display: inline-block;\
+        width: auto;\
         box-sizing: border-box;\
         min-width: 0;\
         border-radius: 10px;\
-        border: 1px solid rgba(255, 247, 77, 0.6);\
-        background: #101010;\
+        border: 1px solid rgba(255, 247, 77, 0.25);\
+        background: transparent;\
         color: #fff74d;\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
         font-weight: 800;\
         letter-spacing: 0.14em;\
         text-transform: uppercase;\
         cursor: pointer;\
+        box-shadow: 0 0 8px rgba(255, 247, 77, 0.15);\
+        transition: all 0.3s ease;\
+      }\
+      .om-enter-btn:hover {\
+        border-color: rgba(255, 247, 77, 0.4);\
+        box-shadow: 0 0 12px rgba(255, 247, 77, 0.25);\
       }\
       .om-enter-btn {\
-        padding: 14px 16px;\
+        padding: 14px 32px;\
         font-size: clamp(14px, 2.8vw, 18px);\
       }\
       .om-subscribe-form {\
@@ -102,7 +112,7 @@
         color: #fff74d;\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
         font-weight: 700;\
-        font-size: 14px;\
+        font-size: 16px;\
         outline: none;\
       }\
       .om-email-input::placeholder {\
@@ -151,7 +161,7 @@
         }\
         .om-email-input {\
           padding: 10px 11px;\
-          font-size: 12px;\
+          font-size: 16px;\
         }\
         .om-legal-note, .om-status {\
           font-size: 10px;\
