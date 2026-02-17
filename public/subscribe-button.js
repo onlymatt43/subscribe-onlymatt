@@ -51,7 +51,7 @@
         padding: 16px;\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
       }\
-      .om-enter-btn, .om-submit-btn {\
+      .om-enter-btn {\
         width: 100%;\
         border-radius: 10px;\
         border: 1px solid rgba(255, 247, 77, 0.6);\
@@ -93,10 +93,6 @@
       }\
       .om-email-input:focus {\
         border-color: #fff74d;\
-      }\
-      .om-submit-btn {\
-        padding: 12px 14px;\
-        font-size: 13px;\
       }\
       .om-legal-note {\
         margin: 0;\
@@ -140,17 +136,14 @@
     input.className = 'om-email-input';
     input.placeholder = 'enter your email';
 
-    var submitBtn = document.createElement('button');
-    submitBtn.type = 'submit';
-    submitBtn.className = 'om-submit-btn';
-    submitBtn.textContent = 'SUBSCRIBE';
-
     var note = document.createElement('p');
     note.className = 'om-legal-note';
     note.textContent = 'By dropping your email, you agree aux cookies, a notre vibe de confidentialite, et tu confirmes que tu es majeur selon les lois de ton pays.';
 
     var msg = document.createElement('p');
     msg.className = 'om-status';
+    msg.style.color = '#d3cd58';
+    msg.textContent = 'Type ton email, on connect auto.';
 
     var honeypot = document.createElement('input');
     honeypot.type = 'text';
@@ -160,7 +153,6 @@
     honeypot.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;';
 
     form.appendChild(input);
-    form.appendChild(submitBtn);
     form.appendChild(note);
     form.appendChild(msg);
     form.appendChild(honeypot);
@@ -176,17 +168,24 @@
       input.focus();
     });
 
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      msg.textContent = '';
-      submitBtn.disabled = true;
-      submitBtn.textContent = '...';
+    var submitTimeout = null;
+    var isSubmitting = false;
+    var hasSubmitted = false;
+
+    async function submitEmail() {
+      if (isSubmitting || hasSubmitted) return;
 
       try {
         var email = input.value.trim().toLowerCase();
         if (!email) {
           msg.style.color = '#ff7a7a';
           msg.textContent = 'Email required';
+          return;
+        }
+        var basicEmailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+        if (!basicEmailRegex.test(email)) {
+          msg.style.color = '#d3cd58';
+          msg.textContent = 'Complete ton email.';
           return;
         }
         if (blockedPatterns.some(function (p) { return p.test(email); })) {
@@ -200,6 +199,10 @@
           return;
         }
 
+        isSubmitting = true;
+        msg.style.color = '#d3cd58';
+        msg.textContent = 'Connecting...';
+
         var res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -208,9 +211,11 @@
         var data = await res.json();
 
         if (!res.ok) {
+          isSubmitting = false;
           msg.style.color = '#ff7a7a';
           msg.textContent = data.error || 'Error';
         } else {
+          hasSubmitted = true;
           msg.style.color = '#9cff77';
           msg.textContent = data.message || 'Email saved';
           localStorage.setItem('hasSubscribed', 'true');
@@ -220,12 +225,22 @@
           }, 1000);
         }
       } catch (_) {
+        isSubmitting = false;
         msg.style.color = '#ff7a7a';
         msg.textContent = 'Network error';
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'SUBSCRIBE';
       }
+    }
+
+    input.addEventListener('input', function () {
+      if (submitTimeout) clearTimeout(submitTimeout);
+      submitTimeout = setTimeout(function () {
+        submitEmail();
+      }, 750);
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      submitEmail();
     });
   }
 
