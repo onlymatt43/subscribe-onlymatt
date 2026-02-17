@@ -90,6 +90,17 @@ export async function upsertSubscriber({ email, source, ip, userAgent }) {
       await client.execute(statement);
       return;
     }
+    if (message.includes('UNIQUE constraint failed: subscribers.email')) {
+      await client.execute({
+        sql: `
+          UPDATE subscribers
+          SET source = ?, ip = ?, user_agent = ?, updated_at = CURRENT_TIMESTAMP
+          WHERE email = ?
+        `,
+        args: [source, ip || 'unknown', userAgent || null, email],
+      });
+      return;
+    }
     throw error;
   }
 }
