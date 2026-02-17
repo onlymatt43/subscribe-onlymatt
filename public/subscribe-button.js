@@ -1,6 +1,7 @@
 (function () {
   if (window.__omSubscribeLoaded) return;
   window.__omSubscribeLoaded = true;
+  if (localStorage.getItem('hasSubscribed') === 'true') return;
 
   function getDefaultApiBase() {
     try {
@@ -14,6 +15,11 @@
   var apiBase = (window.OM_SUBSCRIBE_API_BASE || getDefaultApiBase()).replace(/\/$/, '');
   var endpoint = apiBase + '/api/subscribe';
   var source = (window.OM_SUBSCRIBE_SOURCE || window.location.hostname || 'embed').toLowerCase();
+  var blockedPatterns = [
+    /tempmail/i, /throwaway/i, /disposable/i,
+    /guerrillamail/i, /mailinator/i, /10minutemail/i,
+    /trashmail/i, /yopmail/i, /sharklasers/i
+  ];
 
   function init() {
     var wrap = document.createElement('div');
@@ -36,8 +42,16 @@
     var msg = document.createElement('div');
     msg.style.cssText = 'margin-top:8px;font-size:12px;color:#c9c9c9;min-height:16px;';
 
+    var honeypot = document.createElement('input');
+    honeypot.type = 'text';
+    honeypot.name = 'website';
+    honeypot.tabIndex = -1;
+    honeypot.autocomplete = 'off';
+    honeypot.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;';
+
     form.appendChild(input);
     form.appendChild(btn);
+    form.appendChild(honeypot);
     wrap.appendChild(form);
     wrap.appendChild(msg);
     document.body.appendChild(wrap);
@@ -49,10 +63,27 @@
       btn.textContent = '...';
 
       try {
+        var email = input.value.trim().toLowerCase();
+        if (!email) {
+          msg.style.color = '#ff6b6b';
+          msg.textContent = 'Email required';
+          return;
+        }
+        if (blockedPatterns.some(function (p) { return p.test(email); })) {
+          msg.style.color = '#ff6b6b';
+          msg.textContent = 'Disposable email refused';
+          return;
+        }
+        if (honeypot.value) {
+          msg.style.color = '#ff6b6b';
+          msg.textContent = 'Validation failed';
+          return;
+        }
+
         var res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: input.value.trim(), source: source })
+          body: JSON.stringify({ email: email, source: source, website: honeypot.value || '' })
         });
         var data = await res.json();
         if (!res.ok) {
@@ -61,7 +92,11 @@
         } else {
           msg.style.color = '#5ee07f';
           msg.textContent = data.message || 'Saved';
+          localStorage.setItem('hasSubscribed', 'true');
           input.value = '';
+          setTimeout(function () {
+            wrap.remove();
+          }, 900);
         }
       } catch (_) {
         msg.style.color = '#ff6b6b';

@@ -2,6 +2,11 @@ import { upsertSubscriber } from './db.js';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const sourceRegex = /^[a-z0-9._-]{2,60}$/i;
+const blockedEmailPatterns = [
+  /tempmail/i, /throwaway/i, /disposable/i,
+  /guerrillamail/i, /mailinator/i, /10minutemail/i,
+  /trashmail/i, /yopmail/i, /sharklasers/i
+];
 
 function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -31,9 +36,16 @@ export default async function handler(req, res) {
     const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
     const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
     const source = parseSource(body.source);
+    const website = typeof body.website === 'string' ? body.website.trim() : '';
 
     if (!email || !emailRegex.test(email)) {
       return res.status(400).json({ error: 'Invalid email' });
+    }
+    if (blockedEmailPatterns.some((pattern) => pattern.test(email))) {
+      return res.status(400).json({ error: 'Disposable email refused' });
+    }
+    if (website) {
+      return res.status(400).json({ error: 'Bot detected' });
     }
 
     const ip = req.headers['x-forwarded-for']?.toString().split(',')[0]?.trim()
@@ -50,7 +62,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true, message: 'Email saved', source });
   } catch (error) {
     console.error('subscribe error', error);
-    const details = error instanceof Error ? error.message : String(error);
-    return res.status(500).json({ error: 'Server error', details });
+    return res.status(500).json({ error: 'Server error' });
   }
 }
