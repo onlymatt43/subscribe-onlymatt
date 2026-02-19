@@ -36,8 +36,8 @@
         position: fixed;\
         inset: 0;\
         width: 100vw;\
+        height: 100vh;\
         max-width: 100vw;\
-        overflow: hidden;\
         z-index: 99999;\
         display: flex;\
         align-items: center;\
@@ -46,17 +46,43 @@
         box-sizing: border-box;\
         pointer-events: none;\
       }\
+      .om-subscribe-root::before {\
+        content: "";\
+        position: absolute;\
+        inset: 0;\
+        background-image: url("https://onlymatt-public-zone.b-cdn.net/card/solo-pics14728a1b-b8ad-41b0-beac-e8f6b24202a8.JPEG");\
+        background-size: cover;\
+        background-position: center;\
+        background-repeat: no-repeat;\
+        filter: brightness(0.4) contrast(1.1);\
+        pointer-events: auto;\
+      }\
+      .om-subscribe-root::after {\
+        content: "";\
+        position: absolute;\
+        inset: 0;\
+        backdrop-filter: blur(8px) saturate(1.2);\
+        -webkit-backdrop-filter: blur(8px) saturate(1.2);\
+        background: rgba(0, 0, 0, 0.3);\
+        pointer-events: none;\
+      }\
       .om-subscribe-panel {\
+        position: relative;\
+        z-index: 10;\
         pointer-events: auto;\
         width: 100%;\
         max-width: min(520px, calc(100vw - 24px));\
         box-sizing: border-box;\
         overflow: hidden;\
-        background: rgba(8, 8, 8, 0.95);\
-        border: 1px solid rgba(255, 247, 77, 0.45);\
-        border-radius: 14px;\
-        box-shadow: 0 14px 44px rgba(0,0,0,0.45);\
-        padding: 16px;\
+        background: linear-gradient(145deg, rgba(18, 18, 18, 0.95), rgba(8, 8, 8, 0.98));\
+        border: 1px solid rgba(255, 247, 77, 0.3);\
+        border-radius: 24px;\
+        box-shadow: \
+          inset 2px 2px 8px rgba(255, 247, 77, 0.08),\
+          inset -2px -2px 8px rgba(0, 0, 0, 0.5),\
+          0 20px 60px rgba(0, 0, 0, 0.7),\
+          0 0 0 1px rgba(255, 247, 77, 0.15);\
+        padding: 20px;\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
         display: flex;\
         flex-direction: column;\
@@ -67,21 +93,30 @@
         width: auto;\
         box-sizing: border-box;\
         min-width: 0;\
-        border-radius: 10px;\
-        border: 1px solid rgba(255, 247, 77, 0.25);\
-        background: transparent;\
+        border-radius: 16px;\
+        border: 1px solid rgba(255, 247, 77, 0.4);\
+        background: linear-gradient(145deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.95));\
         color: #fff74d;\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
         font-weight: 800;\
         letter-spacing: 0.14em;\
         text-transform: uppercase;\
         cursor: pointer;\
-        box-shadow: 0 0 8px rgba(255, 247, 77, 0.15);\
+        box-shadow: \
+          inset 2px 2px 6px rgba(255, 247, 77, 0.1),\
+          inset -2px -2px 6px rgba(0, 0, 0, 0.6),\
+          0 8px 24px rgba(255, 247, 77, 0.2),\
+          0 0 0 1px rgba(255, 247, 77, 0.2);\
         transition: all 0.3s ease;\
       }\
       .om-enter-btn:hover {\
-        border-color: rgba(255, 247, 77, 0.4);\
-        box-shadow: 0 0 12px rgba(255, 247, 77, 0.25);\
+        transform: translateY(-2px);\
+        box-shadow: \
+          inset 2px 2px 8px rgba(255, 247, 77, 0.15),\
+          inset -2px -2px 8px rgba(0, 0, 0, 0.7),\
+          0 12px 32px rgba(255, 247, 77, 0.3),\
+          0 0 20px rgba(255, 247, 77, 0.15);\
+        border-color: rgba(255, 247, 77, 0.6);\
       }\
       .om-enter-btn {\
         padding: 14px 32px;\
@@ -105,21 +140,29 @@
         width: 100%;\
         min-width: 0;\
         box-sizing: border-box;\
-        padding: 12px 14px;\
-        border-radius: 10px;\
-        border: 1px solid #3f3f3f;\
-        background: #121212;\
+        padding: 14px 16px;\
+        border-radius: 14px;\
+        border: 1px solid rgba(255, 247, 77, 0.25);\
+        background: linear-gradient(145deg, rgba(8, 8, 8, 0.95), rgba(15, 15, 15, 0.9));\
         color: #fff74d;\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
         font-weight: 700;\
         font-size: 16px;\
         outline: none;\
+        box-shadow: \
+          inset 3px 3px 8px rgba(0, 0, 0, 0.7),\
+          inset -2px -2px 6px rgba(255, 247, 77, 0.05);\
+        transition: all 0.3s ease;\
       }\
       .om-email-input::placeholder {\
-        color: #bdb76b;\
+        color: rgba(189, 183, 107, 0.7);\
       }\
       .om-email-input:focus {\
-        border-color: #fff74d;\
+        border-color: rgba(255, 247, 77, 0.5);\
+        box-shadow: \
+          inset 3px 3px 10px rgba(0, 0, 0, 0.8),\
+          inset -2px -2px 8px rgba(255, 247, 77, 0.08),\
+          0 0 12px rgba(255, 247, 77, 0.2);\
       }\
       .om-legal-note {\
         margin: 0;\
@@ -151,17 +194,19 @@
       @media (max-width: 480px) {\
         .om-subscribe-panel {\
           width: 100%;\
-          padding: 10px;\
-          border-radius: 12px;\
+          padding: 16px;\
+          border-radius: 20px;\
         }\
         .om-enter-btn {\
-          padding: 11px;\
-          letter-spacing: 0.06em;\
+          padding: 12px 24px;\
+          letter-spacing: 0.08em;\
           font-size: 14px;\
+          border-radius: 14px;\
         }\
         .om-email-input {\
-          padding: 10px 11px;\
+          padding: 12px 14px;\
           font-size: 16px;\
+          border-radius: 12px;\
         }\
         .om-legal-note, .om-status {\
           font-size: 10px;\
