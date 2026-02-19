@@ -54,7 +54,8 @@
         background-size: cover;\
         background-position: center;\
         background-repeat: no-repeat;\
-        filter: brightness(0.4) contrast(1.1);\
+        filter: brightness(0.5) contrast(1.2);\
+        mix-blend-mode: screen;\
         pointer-events: none;\
       }\
       .om-subscribe-root::after {\
