@@ -55,7 +55,7 @@
         background-position: center;\
         background-repeat: no-repeat;\
         filter: brightness(0.4) contrast(1.1);\
-        pointer-events: auto;\
+        pointer-events: none;\
       }\
       .om-subscribe-root::after {\
         content: "";\
