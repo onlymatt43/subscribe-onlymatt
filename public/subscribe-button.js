@@ -94,11 +94,9 @@
         position: absolute;\
         inset: 0;\
         background-image: url("https://onlymatt-public-zone.b-cdn.net/card/solo-picseddandy_Onlymatt_6.PNG");\
-        background-size: contain;\
+        background-size: cover;\
         background-position: center;\
         background-repeat: no-repeat;\
-        filter: brightness(0.5) contrast(1.2);\
-        mix-blend-mode: screen;\
         pointer-events: none;\
       }\
       .om-subscribe-root::after {\
