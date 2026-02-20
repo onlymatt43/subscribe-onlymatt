@@ -2,17 +2,6 @@
   if (window.__omSubscribeLoaded) return;
   window.__omSubscribeLoaded = true;
   
-  // Fallback image si API échoue
-  var fallbackImages = [
-    'subscription1.png',
-    'subscription2.png'
-  ];
-  var fallbackPhoto = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
-  var backgroundImageUrl = 'https://onlymatt-public-zone.b-cdn.net/' + fallbackPhoto + '?v=' + Date.now();
-  
-  // Tente de charger une image aléatoire depuis l'API
-  var apiBase = (window.OM_SUBSCRIBE_API_BASE || getDefaultApiBase()).replace(/\/$/, '');
-  
   function getDefaultApiBase() {
     try {
       if (document.currentScript && document.currentScript.src) {
@@ -21,6 +10,16 @@
     } catch (_) {}
     return window.location.origin;
   }
+  
+  var apiBase = (window.OM_SUBSCRIBE_API_BASE || getDefaultApiBase()).replace(/\/$/, '');
+  
+  // Fallback image si API échoue
+  var fallbackImages = [
+    'subscription1.png',
+    'subscription2.png'
+  ];
+  var fallbackPhoto = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
+  var backgroundImageUrl = 'https://onlymatt-public-zone.b-cdn.net/' + fallbackPhoto + '?v=' + Date.now();
   
   // Charge image aléatoire en arrière-plan (n'attend pas pour afficher le bouton)
   fetch(apiBase + '/api/random-subscription')
