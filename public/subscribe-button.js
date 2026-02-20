@@ -2,14 +2,42 @@
   if (window.__omSubscribeLoaded) return;
   window.__omSubscribeLoaded = true;
   
-  // Random background photo selection (must be before hasSubscribed check)
-  var subscriptionPhotos = [
-    'subscription_Onlymatt_1.png',
-    'subscription_Onlymatt_2.png',
-    'subscription_Onlymatt_3.png'
+  // Fallback image si API échoue
+  var fallbackImages = [
+    'subscription1.png',
+    'subscription2.png'
   ];
-  var randomPhoto = subscriptionPhotos[Math.floor(Math.random() * subscriptionPhotos.length)];
-  var backgroundImageUrl = 'https://onlymatt-public-zone.b-cdn.net/card/' + randomPhoto;
+  var fallbackPhoto = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
+  var backgroundImageUrl = 'https://onlymatt-public-zone.b-cdn.net/' + fallbackPhoto + '?v=' + Date.now();
+  
+  // Tente de charger une image aléatoire depuis l'API
+  var apiBase = (window.OM_SUBSCRIBE_API_BASE || getDefaultApiBase()).replace(/\/$/, '');
+  
+  function getDefaultApiBase() {
+    try {
+      if (document.currentScript && document.currentScript.src) {
+        return new URL(document.currentScript.src).origin;
+      }
+    } catch (_) {}
+    return window.location.origin;
+  }
+  
+  // Charge image aléatoire en arrière-plan (n'attend pas pour afficher le bouton)
+  fetch(apiBase + '/api/random-subscription')
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.url) {
+        backgroundImageUrl = data.url;
+        // Met à jour l'image si l'overlay est déjà affiché
+        var overlay = document.querySelector('.om-subscribe-overlay');
+        if (overlay) {
+          overlay.style.backgroundImage = 'linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url(' + backgroundImageUrl + ')';
+        }
+      }
+    })
+    .catch(function(err) {
+      console.warn('Failed to load random subscription image, using fallback:', err);
+    });
   
   // Show welcome back message for returning subscribers
   if (localStorage.getItem('hasSubscribed') === 'true') {
@@ -20,16 +48,6 @@
     return;
   }
 
-  function getDefaultApiBase() {
-    try {
-      if (document.currentScript && document.currentScript.src) {
-        return new URL(document.currentScript.src).origin;
-      }
-    } catch (_) {}
-    return window.location.origin;
-  }
-
-  var apiBase = (window.OM_SUBSCRIBE_API_BASE || getDefaultApiBase()).replace(/\/$/, '');
   var endpoint = apiBase + '/api/subscribe';
   var source = (window.OM_SUBSCRIBE_SOURCE || window.location.hostname || 'embed').toLowerCase();
   var blockedPatterns = [

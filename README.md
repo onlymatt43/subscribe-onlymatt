@@ -4,7 +4,10 @@ Système autonome de collecte d'emails avec bouton embeddable et API Vercel.
 
 ## Composants
 
+## Composants
+
 - **API**: `POST /api/subscribe` (Vercel serverless)
+- **API**: `GET /api/random-subscription` (rotation d'images)
 - **Bouton**: `public/subscribe-button.js` (embeddable partout)
 - **Database**: Turso (SQLite cloud)
 - **Demo**: `public/index.html`
@@ -14,11 +17,18 @@ Système autonome de collecte d'emails avec bouton embeddable et API Vercel.
 ### Variables d'environnement (Vercel)
 
 ```bash
+# Database (requis)
 TURSO_DATABASE_URL=libsql://your-db.turso.io
 TURSO_AUTH_TOKEN=your-turso-token
+
+# Bunny Storage (requis pour rotation d'images)
+BUNNY_STORAGE_API_KEY=your-bunny-storage-key
+BUNNY_STORAGE_ZONE=onlymatt-public
+BUNNY_SUBSCRIPTION_FOLDER=
 ```
 
-**Sans ces variables, l'API retournera une erreur 500.**
+**Sans les variables Turso, l'API subscribe retournera une erreur 500.**
+**Sans `BUNNY_STORAGE_API_KEY`, le bouton utilisera des images fallback fixes.**
 
 ### Schéma de base de données
 
@@ -134,14 +144,24 @@ Le bouton détecte automatiquement son domaine d'origine et poste vers `/api/sub
 
 ## Comportement du bouton
 
-1. Vérifie `localStorage` → Si `hasSubscribed === 'true'`, n'affiche rien
-2. Injecte overlay avec bouton "ENTER" centré
-3. Au clic, affiche formulaire email
-4. Soumission auto après 750ms d'inactivité dans le champ
-5. Validation côté client (regex + emails jetables)
-6. POST vers API
-7. Affiche statut (succès vert / erreur rouge)
-8. Si succès: marque `hasSubscribed` et ferme après 1s
+1. Charge une image de fond aléatoire depuis Bunny Storage (toutes les `subscription*.png`)
+2. Vérifie `localStorage` → Si `hasSubscribed === 'true'`, affiche message de bienvenue
+3. Injecte overlay avec bouton "ENTER" centré et image de fond
+4. Au clic, affiche formulaire email
+5. Soumission auto après 750ms d'inactivité dans le champ
+6. Validation côté client (regex + emails jetables)
+7. POST vers API
+8. Affiche statut (succès vert / erreur rouge)
+9. Si succès: marque `hasSubscribed` et ferme après 1s
+
+## Rotation d'images de fond
+
+Le système charge automatiquement **toutes les images nommées `subscription*.png`** depuis Bunny Storage:
+
+- `subscription1.png`, `subscription2.png`, `subscription3.png`, etc.
+- Uploadez simplement de nouvelles images avec ce pattern dans Bunny, aucun code à modifier
+- Si l'API échoue, le bouton utilise `subscription1.png` et `subscription2.png` comme fallback
+- Cache buster automatique pour éviter les problèmes de cache CDN
 
 ## Déploiement Vercel
 
@@ -150,8 +170,12 @@ vercel --prod
 ```
 
 Assure-toi d'avoir configuré les variables d'environnement dans Vercel:
-- Settings → Environment Variables
-- Ajoute `TURSO_DATABASE_URL` et `TURSO_AUTH_TOKEN`
+- Settings → Environment Variables → Ajoute:
+  - `TURSO_DATABASE_URL` (requis pour database)
+  - `TURSO_AUTH_TOKEN` (requis pour database)
+  - `BUNNY_STORAGE_API_KEY` (requis pour rotation d'images)
+  - `BUNNY_STORAGE_ZONE` (optionnel, défaut: `onlymatt-public`)
+  - `BUNNY_SUBSCRIPTION_FOLDER` (optionnel, défaut: root)
 
 ## Ce que le système ne fait pas
 
