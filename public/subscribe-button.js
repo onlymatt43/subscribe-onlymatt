@@ -1,7 +1,15 @@
 (function () {
   if (window.__omSubscribeLoaded) return;
   window.__omSubscribeLoaded = true;
-  if (localStorage.getItem('hasSubscribed') === 'true') return;
+  
+  // Show welcome back message for returning subscribers
+  if (localStorage.getItem('hasSubscribed') === 'true') {
+    var subscribedEmail = localStorage.getItem('subscribedEmail');
+    if (subscribedEmail) {
+      showWelcomeBack(subscribedEmail);
+    }
+    return;
+  }
 
   function getDefaultApiBase() {
     try {
@@ -20,6 +28,41 @@
     /guerrillamail/i, /mailinator/i, /10minutemail/i,
     /trashmail/i, /yopmail/i, /sharklasers/i
   ];
+
+  function showWelcomeBack(email) {
+    var username = email.split('@')[0];
+    
+    injectStyles();
+    
+    var root = document.createElement('div');
+    root.className = 'om-subscribe-root';
+    
+    var panel = document.createElement('div');
+    panel.className = 'om-subscribe-panel';
+    panel.style.textAlign = 'center';
+    panel.style.padding = '40px 20px';
+    
+    var welcomeMsg = document.createElement('div');
+    welcomeMsg.style.cssText = 'font-family: "Montserrat", sans-serif; font-weight: 800; font-size: 24px; letter-spacing: 0.1em; text-transform: uppercase; color: #fff74d; margin-bottom: 12px;';
+    welcomeMsg.textContent = 'WELCOME BACK';
+    
+    var usernameDiv = document.createElement('div');
+    usernameDiv.style.cssText = 'font-family: "Montserrat", sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 0.05em; color: rgba(255, 255, 255, 0.8);';
+    usernameDiv.textContent = username;
+    
+    panel.appendChild(welcomeMsg);
+    panel.appendChild(usernameDiv);
+    root.appendChild(panel);
+    document.body.appendChild(root);
+    
+    setTimeout(function() {
+      root.style.transition = 'opacity 0.5s ease';
+      root.style.opacity = '0';
+      setTimeout(function() {
+        root.remove();
+      }, 500);
+    }, 3000);
+  }
 
   function injectStyles() {
     if (document.getElementById('om-subscribe-styles')) return;
@@ -324,6 +367,7 @@
           msg.style.color = '#9cff77';
           msg.textContent = data.message || 'Email saved';
           localStorage.setItem('hasSubscribed', 'true');
+          localStorage.setItem('subscribedEmail', email);
           input.value = '';
           setTimeout(function () {
             root.remove();
