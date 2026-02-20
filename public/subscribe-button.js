@@ -99,15 +99,6 @@
         background-repeat: no-repeat;\
         pointer-events: none;\
       }\
-      .om-subscribe-root::after {\
-        content: "";\
-        position: absolute;\
-        inset: 0;\
-        backdrop-filter: blur(8px) saturate(1.2);\
-        -webkit-backdrop-filter: blur(8px) saturate(1.2);\
-        background: rgba(0, 0, 0, 0.3);\
-        pointer-events: none;\
-      }\
       .om-subscribe-panel {\
         position: relative;\
         z-index: 10;\
