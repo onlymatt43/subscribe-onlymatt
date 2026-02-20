@@ -14,7 +14,7 @@
   var apiBase = (window.OM_SUBSCRIBE_API_BASE || getDefaultApiBase()).replace(/\/$/, '');
   
   // Fallback image si API échoue (utilise config globale si disponible)
-  var fallbackFolder = window.OM_SUBSCRIPTION_FOLDER || '';
+  var fallbackFolder = window.OM_SUBSCRIPTION_FOLDER || 'subscription';
   var fallbackImages = [
     'subscription1.png',
     'subscription2.png'
