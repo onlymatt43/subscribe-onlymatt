@@ -93,7 +93,7 @@
         content: "";\
         position: absolute;\
         inset: 0;\
-        background-image: url("https://onlymatt-public-zone.b-cdn.net/card/solo-picseddandy_Onlymatt_6.PNG?width=1200");\
+        background-image: url("https://onlymatt-public-zone.b-cdn.net/card/solo-picseddandy_Onlymatt_6.PNG");\
         background-size: cover;\
         background-position: center;\
         background-repeat: no-repeat;\
