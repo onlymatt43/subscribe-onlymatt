@@ -24,8 +24,13 @@ TURSO_AUTH_TOKEN=your-turso-token
 # Bunny Storage (requis pour rotation d'images)
 BUNNY_STORAGE_API_KEY=your-bunny-storage-key
 BUNNY_STORAGE_ZONE=onlymatt-public
-BUNNY_SUBSCRIPTION_FOLDER=
+BUNNY_SUBSCRIPTION_FOLDER=subscription
 ```
+
+**Exemples de configuration**:
+- Images à la racine: `BUNNY_SUBSCRIPTION_FOLDER=` (vide)
+- Images dans dossier: `BUNNY_SUBSCRIPTION_FOLDER=subscription` (sans `/`)
+- Sous-dossier: `BUNNY_SUBSCRIPTION_FOLDER=images/subscription`
 
 **Sans les variables Turso, l'API subscribe retournera une erreur 500.**
 **Sans `BUNNY_STORAGE_API_KEY`, le bouton utilisera des images fallback fixes.**
@@ -78,6 +83,7 @@ Le bouton détecte automatiquement son domaine d'origine et poste vers `/api/sub
 <script>
   window.OM_SUBSCRIBE_SOURCE = 'instagram-bio';
   window.OM_SUBSCRIBE_API_BASE = 'https://subscribe-onlymatt.vercel.app';
+  window.OM_SUBSCRIPTION_FOLDER = 'subscription'; // Si images dans un dossier
 </script>
 <script src="https://subscribe-onlymatt.vercel.app/subscribe-button.js"></script>
 ```
@@ -85,6 +91,7 @@ Le bouton détecte automatiquement son domaine d'origine et poste vers `/api/sub
 **Options disponibles**:
 - `OM_SUBSCRIBE_SOURCE`: Force une source spécifique (défaut: hostname actuel)
 - `OM_SUBSCRIBE_API_BASE`: Force un backend différent (défaut: domaine du script)
+- `OM_SUBSCRIPTION_FOLDER`: Dossier des images fallback (défaut: root)
 
 ## API
 

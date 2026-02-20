@@ -13,13 +13,15 @@
   
   var apiBase = (window.OM_SUBSCRIBE_API_BASE || getDefaultApiBase()).replace(/\/$/, '');
   
-  // Fallback image si API échoue
+  // Fallback image si API échoue (utilise config globale si disponible)
+  var fallbackFolder = window.OM_SUBSCRIPTION_FOLDER || '';
   var fallbackImages = [
     'subscription1.png',
     'subscription2.png'
   ];
   var fallbackPhoto = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
-  var backgroundImageUrl = 'https://onlymatt-public-zone.b-cdn.net/' + fallbackPhoto + '?v=' + Date.now();
+  var fallbackPath = fallbackFolder ? fallbackFolder + '/' + fallbackPhoto : fallbackPhoto;
+  var backgroundImageUrl = 'https://onlymatt-public-zone.b-cdn.net/' + fallbackPath + '?v=' + Date.now();
   
   // Charge image aléatoire en arrière-plan (n'attend pas pour afficher le bouton)
   fetch(apiBase + '/api/random-subscription')

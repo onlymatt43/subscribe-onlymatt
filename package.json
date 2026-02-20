@@ -9,5 +9,8 @@
   },
   "dependencies": {
     "@libsql/client": "^0.17.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.58.2"
   }
 }
