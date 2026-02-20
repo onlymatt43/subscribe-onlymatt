@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   try {
     const apiKey = process.env.BUNNY_STORAGE_API_KEY;
     const storageZone = process.env.BUNNY_STORAGE_ZONE || 'onlymatt-public';
-    const folder = process.env.BUNNY_SUBSCRIPTION_FOLDER || '';
+    const folder = process.env.BUNNY_FOLDER || '';
 
     if (!apiKey) {
       return res.status(500).json({ 

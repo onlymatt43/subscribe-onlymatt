@@ -24,13 +24,13 @@ TURSO_AUTH_TOKEN=your-turso-token
 # Bunny Storage (requis pour rotation d'images)
 BUNNY_STORAGE_API_KEY=your-bunny-storage-key
 BUNNY_STORAGE_ZONE=onlymatt-public
-BUNNY_SUBSCRIPTION_FOLDER=subscription
+BUNNY_FOLDER=subscription
 ```
 
 **Exemples de configuration**:
-- Images à la racine: `BUNNY_SUBSCRIPTION_FOLDER=` (vide)
-- Images dans dossier: `BUNNY_SUBSCRIPTION_FOLDER=subscription` (sans `/`)
-- Sous-dossier: `BUNNY_SUBSCRIPTION_FOLDER=images/subscription`
+- Images à la racine: `BUNNY_FOLDER=` (vide)
+- Images dans dossier: `BUNNY_FOLDER=subscription` (sans `/`)
+- Sous-dossier: `BUNNY_FOLDER=images/subscription`
 
 **Sans les variables Turso, l'API subscribe retournera une erreur 500.**
 **Sans `BUNNY_STORAGE_API_KEY`, le bouton utilisera des images fallback fixes.**
@@ -182,7 +182,7 @@ Assure-toi d'avoir configuré les variables d'environnement dans Vercel:
   - `TURSO_AUTH_TOKEN` (requis pour database)
   - `BUNNY_STORAGE_API_KEY` (requis pour rotation d'images)
   - `BUNNY_STORAGE_ZONE` (optionnel, défaut: `onlymatt-public`)
-  - `BUNNY_SUBSCRIPTION_FOLDER` (optionnel, défaut: root)
+  - `BUNNY_FOLDER` (optionnel, défaut: root)
 
 ## Ce que le système ne fait pas
 
