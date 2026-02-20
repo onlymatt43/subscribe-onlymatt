@@ -50,7 +50,7 @@
         content: "";\
         position: absolute;\
         inset: 0;\
-        background-image: url("https://onlymatt-public-zone.b-cdn.net/card/solo-pics14728a1b-b8ad-41b0-beac-e8f6b24202a8.JPEG");\
+        background-image: url("https://onlymatt-public-zone.b-cdn.net/card/solo-pics14728a1b-b8ad-41b0-beac-e8f6b24202a8.JPEG?width=1200");\
         background-size: cover;\
         background-position: center;\
         background-repeat: no-repeat;\
