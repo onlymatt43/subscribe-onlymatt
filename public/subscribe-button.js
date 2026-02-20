@@ -107,14 +107,12 @@
         max-width: min(520px, calc(100vw - 24px));\
         box-sizing: border-box;\
         overflow: hidden;\
-        background: linear-gradient(145deg, rgba(18, 18, 18, 0.95), rgba(8, 8, 8, 0.98));\
-        border: 1px solid rgba(255, 247, 77, 0.3);\
-        border-radius: 24px;\
-        box-shadow: \
-          inset 2px 2px 8px rgba(255, 247, 77, 0.08),\
-          inset -2px -2px 8px rgba(0, 0, 0, 0.5),\
-          0 20px 60px rgba(0, 0, 0, 0.7),\
-          0 0 0 1px rgba(255, 247, 77, 0.15);\
+        background: rgba(0, 0, 0, 0.4);\
+        backdrop-filter: blur(20px) saturate(1.3);\
+        -webkit-backdrop-filter: blur(20px) saturate(1.3);\
+        border: 1px solid rgba(255, 247, 77, 0.15);\
+        border-radius: 28px;\
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);\
         padding: 20px;\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
         display: flex;\
@@ -126,30 +124,26 @@
         width: auto;\
         box-sizing: border-box;\
         min-width: 0;\
-        border-radius: 16px;\
-        border: 1px solid rgba(255, 247, 77, 0.4);\
-        background: linear-gradient(145deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.95));\
-        color: #fff74d;\
+        border-radius: 20px;\
+        border: 1px solid rgba(255, 247, 77, 0.2);\
+        background: rgba(255, 255, 255, 0.05);\
+        backdrop-filter: blur(10px);\
+        -webkit-backdrop-filter: blur(10px);\
+        color: rgba(255, 247, 77, 0.9);\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
-        font-weight: 800;\
-        letter-spacing: 0.14em;\
+        font-weight: 700;\
+        letter-spacing: 0.1em;\
         text-transform: uppercase;\
         cursor: pointer;\
-        box-shadow: \
-          inset 2px 2px 6px rgba(255, 247, 77, 0.1),\
-          inset -2px -2px 6px rgba(0, 0, 0, 0.6),\
-          0 8px 24px rgba(255, 247, 77, 0.2),\
-          0 0 0 1px rgba(255, 247, 77, 0.2);\
-        transition: all 0.3s ease;\
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(255, 247, 77, 0.05);\
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);\
       }\
       .om-enter-btn:hover {\
-        transform: translateY(-2px);\
-        box-shadow: \
-          inset 2px 2px 8px rgba(255, 247, 77, 0.15),\
-          inset -2px -2px 8px rgba(0, 0, 0, 0.7),\
-          0 12px 32px rgba(255, 247, 77, 0.3),\
-          0 0 20px rgba(255, 247, 77, 0.15);\
-        border-color: rgba(255, 247, 77, 0.6);\
+        transform: translateY(-1px);\
+        background: rgba(255, 255, 255, 0.08);\
+        border-color: rgba(255, 247, 77, 0.3);\
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(255, 247, 77, 0.1);\
+        color: rgba(255, 247, 77, 1);\
       }\
       .om-enter-btn {\
         padding: 14px 32px;\
