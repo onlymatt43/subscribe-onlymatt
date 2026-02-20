@@ -43,22 +43,22 @@ export default async function handler(req, res) {
 
     const files = await response.json();
     
-    // Filtre uniquement les images subscription*.png
-    const subscriptionImages = files.filter(
+    // Filtre uniquement les images (tous formats)
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+    const imageFiles = files.filter(
       (file) =>
         !file.IsDirectory &&
-        file.ObjectName.toLowerCase().startsWith('subscription') &&
-        file.ObjectName.toLowerCase().endsWith('.png')
+        imageExtensions.some((ext) => file.ObjectName.toLowerCase().endsWith(ext))
     );
 
-    if (subscriptionImages.length === 0) {
+    if (imageFiles.length === 0) {
       return res.status(404).json({ 
-        error: 'No subscription images found' 
+        error: 'No images found in folder' 
       });
     }
 
     // Sélectionne une image aléatoire
-    const randomImage = subscriptionImages[Math.floor(Math.random() * subscriptionImages.length)];
+    const randomImage = imageFiles[Math.floor(Math.random() * imageFiles.length)];
     
     // Construit l'URL CDN avec cache buster
     const cacheBuster = Date.now();

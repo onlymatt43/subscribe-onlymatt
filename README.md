@@ -163,10 +163,11 @@ Le bouton détecte automatiquement son domaine d'origine et poste vers `/api/sub
 
 ## Rotation d'images de fond
 
-Le système charge automatiquement **toutes les images nommées `subscription*.png`** depuis Bunny Storage:
+Le système charge automatiquement **toutes les images** du dossier `subscription/` sur Bunny Storage:
 
-- `subscription1.png`, `subscription2.png`, `subscription3.png`, etc.
-- Uploadez simplement de nouvelles images avec ce pattern dans Bunny, aucun code à modifier
+- Formats supportés: `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`
+- Uploadez n'importe quelle image dans le dossier, elle sera automatiquement incluse dans la rotation
+- Aucun code à modifier, détection automatique
 - Si l'API échoue, le bouton utilise `subscription1.png` et `subscription2.png` comme fallback
 - Cache buster automatique pour éviter les problèmes de cache CDN
 
