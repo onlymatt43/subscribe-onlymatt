@@ -2,6 +2,15 @@
   if (window.__omSubscribeLoaded) return;
   window.__omSubscribeLoaded = true;
   
+  // Random background photo selection (must be before hasSubscribed check)
+  var subscriptionPhotos = [
+    'subscription_Onlymatt_1.png',
+    'subscription_Onlymatt_2.png',
+    'subscription_Onlymatt_3.png'
+  ];
+  var randomPhoto = subscriptionPhotos[Math.floor(Math.random() * subscriptionPhotos.length)];
+  var backgroundImageUrl = 'https://onlymatt-public-zone.b-cdn.net/card/' + randomPhoto;
+  
   // Show welcome back message for returning subscribers
   if (localStorage.getItem('hasSubscribed') === 'true') {
     var subscribedEmail = localStorage.getItem('subscribedEmail');
@@ -93,7 +102,7 @@
         content: "";\
         position: absolute;\
         inset: 0;\
-        background-image: url("https://onlymatt-public-zone.b-cdn.net/card/solo-picseddandy_Onlymatt_6.PNG");\
+        background-image: url("' + backgroundImageUrl + '");\
         background-size: cover;\
         background-position: center;\
         background-repeat: no-repeat;\
