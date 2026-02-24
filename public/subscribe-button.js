@@ -102,7 +102,7 @@
         left: 50%;\
         transform: translate(-50%, -50%);\
         background-image: linear-gradient(rgba(0,0,0,0.22), rgba(0,0,0,0.22)), url("' + backgroundImageUrl + '");\
-        background-size: cover;\
+        background-size: contain;\
         background-position: center;\
         background-repeat: no-repeat;\
         pointer-events: none;\
