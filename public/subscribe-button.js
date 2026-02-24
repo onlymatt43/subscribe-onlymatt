@@ -122,7 +122,7 @@
         position: absolute;\
         inset: 0;\
         background-image: url("' + backgroundImageUrl + '");\
-        background-size: cover;\
+        background-size: contain;\
         background-position: center;\
         background-repeat: no-repeat;\
         pointer-events: none;\
