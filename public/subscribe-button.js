@@ -13,32 +13,8 @@
   
   var apiBase = (window.OM_SUBSCRIBE_API_BASE || getDefaultApiBase()).replace(/\/$/, '');
   
-  // Fallback image si API échoue (utilise config globale si disponible)
-  var fallbackFolder = window.OM_SUBSCRIPTION_FOLDER || 'subscription';
-  var fallbackImages = [
-    'subscription1.png',
-    'subscription2.png'
-  ];
-  var fallbackPhoto = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
-  var fallbackPath = fallbackFolder ? fallbackFolder + '/' + fallbackPhoto : fallbackPhoto;
-  var backgroundImageUrl = 'https://onlymatt-public-zone.b-cdn.net/' + fallbackPath + '?v=' + Date.now();
-  
-  // Charge image aléatoire en arrière-plan (n'attend pas pour afficher le bouton)
-  fetch(apiBase + '/api/random-subscription')
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-      if (data.url) {
-        backgroundImageUrl = data.url;
-        // Met à jour l'image si l'overlay est déjà affiché
-        var overlay = document.querySelector('.om-subscribe-overlay');
-        if (overlay) {
-          overlay.style.backgroundImage = 'linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url(' + backgroundImageUrl + ')';
-        }
-      }
-    })
-    .catch(function(err) {
-      console.warn('Failed to load random subscription image, using fallback:', err);
-    });
+  // Image fixe demandée par le user (zone de saisie déjà dessinée sur la photo)
+  var backgroundImageUrl = 'https://onlymatt-public-zone.b-cdn.net/subscription/subscription1.jpg?v=' + Date.now();
   
   // Show welcome back message for returning subscribers
   if (localStorage.getItem('hasSubscribed') === 'true') {
@@ -115,13 +91,13 @@
         justify-content: center;\
         padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)) 12px;\
         box-sizing: border-box;\
-        pointer-events: none;\
+        pointer-events: auto;\
       }\
       .om-subscribe-root::before {\
         content: "";\
         position: absolute;\
         inset: 0;\
-        background-image: url("' + backgroundImageUrl + '");\
+        background-image: linear-gradient(rgba(0,0,0,0.22), rgba(0,0,0,0.22)), url("' + backgroundImageUrl + '");\
         background-size: cover;\
         background-position: center;\
         background-repeat: no-repeat;\
@@ -132,140 +108,88 @@
         z-index: 10;\
         pointer-events: auto;\
         width: 100%;\
-        max-width: min(520px, calc(100vw - 24px));\
-        box-sizing: border-box;\
-        overflow: hidden;\
-        background: rgba(0, 0, 0, 0.4);\
-        backdrop-filter: blur(20px) saturate(1.3);\
-        -webkit-backdrop-filter: blur(20px) saturate(1.3);\
-        border: 1px solid rgba(255, 247, 77, 0.15);\
-        border-radius: 28px;\
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);\
-        padding: 20px;\
-        font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
+        max-width: min(720px, calc(100vw - 24px));\
+        height: 100%;\
+        max-height: min(90vh, 960px);\
         display: flex;\
-        flex-direction: column;\
         align-items: center;\
-      }\
-      .om-enter-btn {\
-        display: inline-block;\
-        width: auto;\
+        justify-content: center;\
         box-sizing: border-box;\
-        min-width: 0;\
-        border-radius: 20px;\
-        border: 1px solid rgba(255, 247, 77, 0.2);\
-        background: rgba(255, 255, 255, 0.05);\
-        backdrop-filter: blur(10px);\
-        -webkit-backdrop-filter: blur(10px);\
-        color: rgba(255, 247, 77, 0.9);\
-        font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
-        font-weight: 700;\
-        letter-spacing: 0.1em;\
-        text-transform: uppercase;\
-        cursor: pointer;\
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(255, 247, 77, 0.05);\
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);\
-      }\
-      .om-enter-btn:hover {\
-        transform: translateY(-1px);\
-        background: rgba(255, 255, 255, 0.08);\
-        border-color: rgba(255, 247, 77, 0.3);\
-        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(255, 247, 77, 0.1);\
-        color: rgba(255, 247, 77, 1);\
-      }\
-      .om-enter-btn {\
-        padding: 14px 32px;\
-        font-size: clamp(14px, 2.8vw, 18px);\
+        background: transparent;\
+        border: none;\
+        box-shadow: none;\
+        padding: 0;\
       }\
       .om-subscribe-form {\
-        display: none;\
-        margin-top: 12px;\
-        min-width: 0;\
+        position: relative;\
         width: 100%;\
+        height: 100%;\
+        display: flex;\
+        align-items: center;\
+        justify-content: center;\
+      }\
+      .om-email-hitbox {\
+        position: absolute;\
+        top: 60%;\
+        left: 50%;\
+        transform: translate(-50%, -50%);\
+        width: min(420px, 82vw);\
+        height: 64px;\
+        display: flex;\
+        align-items: center;\
+        justify-content: center;\
+        padding: 4px 0;\
         box-sizing: border-box;\
-      }\
-      .om-subscribe-form.open {\
-        display: grid;\
-        gap: 10px;\
-      }\
-      .om-subscribe-form > * {\
-        min-width: 0;\
       }\
       .om-email-input {\
         width: 100%;\
-        min-width: 0;\
-        box-sizing: border-box;\
-        padding: 14px 16px;\
-        border-radius: 14px;\
-        border: 1px solid rgba(255, 247, 77, 0.25);\
-        background: linear-gradient(145deg, rgba(8, 8, 8, 0.95), rgba(15, 15, 15, 0.9));\
-        color: #fff74d;\
+        height: 100%;\
+        padding: 0 12px;\
+        background: transparent;\
+        border: none;\
+        outline: none;\
+        color: #ffffff;\
+        caret-color: #ffffff;\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
         font-weight: 700;\
-        font-size: 16px;\
-        outline: none;\
-        box-shadow: \
-          inset 3px 3px 8px rgba(0, 0, 0, 0.7),\
-          inset -2px -2px 6px rgba(255, 247, 77, 0.05);\
-        transition: all 0.3s ease;\
+        font-size: clamp(16px, 4vw, 22px);\
+        letter-spacing: 0.04em;\
+        text-align: center;\
+        box-sizing: border-box;\
       }\
       .om-email-input::placeholder {\
-        color: rgba(189, 183, 107, 0.7);\
+        color: rgba(255,255,255,0.55);\
       }\
       .om-email-input:focus {\
-        border-color: rgba(255, 247, 77, 0.5);\
-        box-shadow: \
-          inset 3px 3px 10px rgba(0, 0, 0, 0.8),\
-          inset -2px -2px 8px rgba(255, 247, 77, 0.08),\
-          0 0 12px rgba(255, 247, 77, 0.2);\
+        outline: none;\
       }\
       .om-legal-note {\
-        margin: 0;\
-        width: 100%;\
-        max-width: 100%;\
-        min-width: 0;\
-        color: #d3cd58;\
-        font-size: clamp(10px, 2.8vw, 11px);\
-        line-height: 1.5;\
-        font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
-        font-weight: 700;\
-        white-space: normal;\
-        overflow-wrap: anywhere;\
-        word-break: break-word;\
+        display: none;\
       }\
       .om-status {\
-        margin: 2px 0 0 0;\
-        min-height: 16px;\
-        width: 100%;\
-        max-width: 100%;\
-        min-width: 0;\
+        position: absolute;\
+        bottom: 14px;\
+        left: 50%;\
+        transform: translateX(-50%);\
+        margin: 0;\
+        padding: 4px 10px;\
+        border-radius: 10px;\
+        background: rgba(0,0,0,0.35);\
+        color: #d3cd58;\
         font-family: \"Montserrat\", system-ui, -apple-system, sans-serif;\
-        font-size: clamp(10px, 2.8vw, 11px);\
+        font-size: clamp(11px, 3vw, 13px);\
         font-weight: 700;\
+        text-align: center;\
         white-space: normal;\
-        overflow-wrap: anywhere;\
-        word-break: break-word;\
+        pointer-events: none;\
       }\
       @media (max-width: 480px) {\
-        .om-subscribe-panel {\
-          width: 100%;\
-          padding: 16px;\
-          border-radius: 20px;\
+        .om-email-hitbox {\
+          top: 62%;\
+          height: 56px;\
         }\
-        .om-enter-btn {\
-          padding: 12px 24px;\
-          letter-spacing: 0.08em;\
-          font-size: 14px;\
-          border-radius: 14px;\
-        }\
-        .om-email-input {\
-          padding: 12px 14px;\
-          font-size: 16px;\
-          border-radius: 12px;\
-        }\
-        .om-legal-note, .om-status {\
-          font-size: 10px;\
-          line-height: 1.35;\
+        .om-status {\
+          font-size: 11px;\
         }\
       }\
     ';
@@ -281,13 +205,11 @@
     var panel = document.createElement('div');
     panel.className = 'om-subscribe-panel';
 
-    var enterBtn = document.createElement('button');
-    enterBtn.type = 'button';
-    enterBtn.className = 'om-enter-btn';
-    enterBtn.textContent = 'ENTER';
-
     var form = document.createElement('form');
     form.className = 'om-subscribe-form';
+
+    var hitbox = document.createElement('div');
+    hitbox.className = 'om-email-hitbox';
 
     var input = document.createElement('input');
     input.type = 'email';
@@ -311,25 +233,47 @@
     honeypot.autocomplete = 'off';
     honeypot.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;';
 
-    form.appendChild(input);
+    hitbox.appendChild(input);
+    form.appendChild(hitbox);
     form.appendChild(note);
     form.appendChild(msg);
     form.appendChild(honeypot);
 
-    panel.appendChild(enterBtn);
     panel.appendChild(form);
     root.appendChild(panel);
     document.body.appendChild(root);
 
-    enterBtn.addEventListener('click', function () {
-      form.classList.add('open');
-      enterBtn.style.display = 'none';
+    setTimeout(function() {
       input.focus();
-    });
+    }, 50);
 
     var submitTimeout = null;
     var isSubmitting = false;
     var hasSubmitted = false;
+
+    function showSuccessVideo() {
+      isSubmitting = false;
+      msg.style.display = 'none';
+      note.style.display = 'none';
+
+      var videoWrapper = document.createElement('div');
+      videoWrapper.style.cssText = 'position: relative; width: min(820px, 95vw); max-height: 82vh; display: flex; align-items: center; justify-content: center;';
+
+      var video = document.createElement('video');
+      video.src = 'https://onlymatt-public-zone.b-cdn.net/subscription/video-subscription1.mp4';
+      video.autoplay = true;
+      video.muted = true;
+      video.controls = true;
+      video.playsInline = true;
+      video.style.cssText = 'width: 100%; max-height: 82vh; border-radius: 18px; box-shadow: 0 12px 50px rgba(0,0,0,0.45); background: #000;';
+
+      videoWrapper.appendChild(video);
+      panel.innerHTML = '';
+      panel.appendChild(videoWrapper);
+
+      // Best effort to start playback on mobile without user gesture issues
+      video.play().catch(function() {});
+    }
 
     async function submitEmail() {
       if (isSubmitting || hasSubmitted) return;
@@ -380,9 +324,7 @@
           localStorage.setItem('hasSubscribed', 'true');
           localStorage.setItem('subscribedEmail', email);
           input.value = '';
-          setTimeout(function () {
-            root.remove();
-          }, 1000);
+          showSuccessVideo();
         }
       } catch (_) {
         isSubmitting = false;
