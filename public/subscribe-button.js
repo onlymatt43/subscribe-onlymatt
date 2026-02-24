@@ -96,7 +96,11 @@
       .om-subscribe-root::before {\
         content: "";\
         position: absolute;\
-        inset: 0;\
+        width: min(900px, 90vw);\
+        height: min(520px, 50vh);\
+        top: 50%;\
+        left: 50%;\
+        transform: translate(-50%, -50%);\
         background-image: linear-gradient(rgba(0,0,0,0.22), rgba(0,0,0,0.22)), url("' + backgroundImageUrl + '");\
         background-size: cover;\
         background-position: center;\
